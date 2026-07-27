@@ -1,0 +1,48 @@
+---
+description: Public Skill 开发与组织规范
+alwaysApply: true
+---
+
+# IKAS Marketplace Public Skill 规范
+
+本仓库是 IKAS Workspace 的公共 Skill 市场，仅存放可复用的 Skill。
+
+## 目录结构
+
+```
+skills/
+└── <skill-name>/
+    ├── SKILL.md
+    └── scripts/
+        └── *.py / *.sh / ...
+```
+
+- 每个 Skill 一个目录，位于 `skills/` 下
+- `SKILL.md` 为 Skill 定义文件（必须）
+- `scripts/` 存放 Skill 使用的脚本（按需）
+- Skill 必须自包含，脚本不得依赖仓库外部的相对路径
+
+## 命名规范
+
+- Skill 目录名使用 kebab-case，不带项目前缀（如 `slack-reply` 而非 `basic-slack-bot-slack-reply`）
+- 脚本文件名使用 snake_case（如 `slack_reply.py`）
+
+## SKILL.md 格式
+
+- 不使用 frontmatter（`alwaysApply` 等由 Workspace 管理）
+- 标题格式：`# <skill-name> / 中文名`
+- 标题下第一行为英文描述，第二行为中文描述
+- 必须包含：Trigger、Prerequisites、Script、Commands、Parameters、Notes 章节
+- 命令示例中脚本路径使用 `.cursor/skills/<skill-name>/scripts/...`（安装后的实际路径）
+
+## 凭证与配置
+
+脚本不得硬编码凭证路径，应按优先级依次检查：
+
+1. 环境变量（直接传值，如 `SLACK_BOT_TOKEN`）
+2. 环境变量（指定文件路径，如 `SLACK_BOT_TOKEN_FILE`）
+3. 工作区根目录下的默认文件（如 `<cwd>/slack-bot-token.json`）
+
+## 变更流程
+
+所有改动走 PR，不直接推送 main。
